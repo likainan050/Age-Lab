@@ -42,7 +42,7 @@
       const app = initializeApp(firebaseConfig);
       const db = getDatabase(app);
     
-      window.firebaseDb = { db, ref, set, get, push, onValue };
+      window.firebaseDb = { db, ref, set, get, push, onValue, remove };
       window.firebaseReady = true;
     
       console.log("Firebase ready:", window.firebaseDb);
