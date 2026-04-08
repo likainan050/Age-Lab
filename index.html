@@ -16,9 +16,29 @@
 </head>
 <body class="bg-slate-50 text-slate-900">
     <div id="root"></div>
-
+    
+    <script type="module">
+      // Import the functions you need from the SDKs you need
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+      // TODO: Add SDKs for Firebase products that you want to use
+      // https://firebase.google.com/docs/web/setup#available-libraries
+    
+      // Your web app's Firebase configuration
+      const firebaseConfig = {
+        apiKey: "AIzaSyBG7_rtekdJ3op-tlTUcHk_eN2RqyCAL9E",
+        authDomain: "gen-lang-client-0781969916.firebaseapp.com",
+        projectId: "gen-lang-client-0781969916",
+        storageBucket: "gen-lang-client-0781969916.firebasestorage.app",
+        messagingSenderId: "522142351405",
+        appId: "1:522142351405:web:5f6dc7b4c962cd41e0b8a4"
+      };
+    
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+    </script>
+    
     <script type="text/babel">
-        const { useState, useEffect, useMemo } = React;
+        const { useState, useEffect } = React;
 
         // --- UTILS ---
         const calcAge = (dateStr) => {
@@ -42,7 +62,7 @@
 
             // Sync with LocalStorage Simulation
             useEffect(() => {
-              if (!roomCode || view === 'landing') return;
+              if (!roomCode || view === 'landing' || !window.firebaseDb) return;
             
               const { db, ref, onValue } = window.firebaseDb;
               const roomRef = ref(db, `rooms/${roomCode}/students`);
@@ -60,6 +80,11 @@
             }, [roomCode, view]);
 
             const createRoom = async () => {
+              if (!window.firebaseDb) {
+                alert("Firebase is not ready yet.");
+                return;
+              }
+              
               const code = Math.floor(1000 + Math.random() * 9000).toString();
               const { db, ref, set } = window.firebaseDb;
             
@@ -273,26 +298,6 @@
 
         const root = ReactDOM.createRoot(document.getElementById('root'));
         root.render(<App />);
-    </script>
-
-    <script type="module">
-      // Import the functions you need from the SDKs you need
-      import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
-      // TODO: Add SDKs for Firebase products that you want to use
-      // https://firebase.google.com/docs/web/setup#available-libraries
-    
-      // Your web app's Firebase configuration
-      const firebaseConfig = {
-        apiKey: "AIzaSyBG7_rtekdJ3op-tlTUcHk_eN2RqyCAL9E",
-        authDomain: "gen-lang-client-0781969916.firebaseapp.com",
-        projectId: "gen-lang-client-0781969916",
-        storageBucket: "gen-lang-client-0781969916.firebasestorage.app",
-        messagingSenderId: "522142351405",
-        appId: "1:522142351405:web:5f6dc7b4c962cd41e0b8a4"
-      };
-    
-      // Initialize Firebase
-      const app = initializeApp(firebaseConfig);
     </script>
 </body>
 </html>
