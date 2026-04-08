@@ -69,20 +69,38 @@
             const [sampleIds, setSampleIds] = useState([]); 
             const [drawSize, setDrawSize] = useState(1);
             const [error, setError] = useState('');
-
+            
+            const resetToLanding = () => {
+              setView('landing');
+              setRoomCode('');
+              setPopulation([]);
+              setSampleIds([]);
+              setDrawSize(1);
+              setError('');
+            };
+            
             // Sync with LocalStorage Simulation
             useEffect(() => {
               if (!roomCode || view === 'landing' || !window.firebaseDb) return;
             
               const { db, ref, onValue } = window.firebaseDb;
-              const roomRef = ref(db, `rooms/${roomCode}/students`);
+              const roomRef = ref(db, `rooms/${roomCode}`);
             
               const unsubscribe = onValue(roomRef, (snapshot) => {
-                const data = snapshot.val() || {};
-                const nextPopulation = Object.entries(data).map(([id, item]) => ({
+                if (!snapshot.exists()) {
+                  alert("This session has ended.");
+                  resetToLanding();
+                  return;
+                }
+            
+                const roomData = snapshot.val() || {};
+                const students = roomData.students || {};
+            
+                const nextPopulation = Object.entries(students).map(([id, item]) => ({
                   id,
                   age: item.age
                 }));
+            
                 setPopulation(nextPopulation);
               });
             
@@ -107,7 +125,26 @@
               setError('');
               setView('teacher');
             };
-
+            
+            const endSession = async () => {
+              if (!window.firebaseDb || !roomCode) {
+                resetToLanding();
+                return;
+              }
+            
+              const confirmed = window.confirm("End this session for everyone?");
+              if (!confirmed) return;
+            
+              try {
+                const { db, ref, remove } = window.firebaseDb;
+                await remove(ref(db, `rooms/${roomCode}`));
+                resetToLanding();
+              } catch (err) {
+                console.error("Failed to end session:", err);
+                alert("Failed to end session.");
+              }
+            };
+            
             const joinRoom = async (e) => {
               e.preventDefault();
               const code = e.target.code.value;
@@ -125,6 +162,12 @@
             
             const submitAge = async (e) => {
               e.preventDefault();
+            
+              if (!window.firebaseDb) {
+                alert("Firebase is not ready yet.");
+                return;
+              }
+            
               const bdayValue = e.target.bday.value;
               const age = calcAge(bdayValue);
             
@@ -133,7 +176,14 @@
                 return;
               }
             
-              const { db, ref, push } = window.firebaseDb;
+              const { db, ref, get, push } = window.firebaseDb;
+            
+              const roomSnapshot = await get(ref(db, `rooms/${roomCode}`));
+              if (!roomSnapshot.exists()) {
+                alert("This session has ended.");
+                resetToLanding();
+                return;
+              }
             
               await push(ref(db, `rooms/${roomCode}/students`), {
                 age,
@@ -212,7 +262,9 @@
                 <div className="p-8 max-w-7xl mx-auto">
                     <header className="flex flex-col md:flex-row justify-between items-center mb-10 gap-6">
                         <div className="text-center md:text-left">
-                            <button onClick={() => { setView('landing'); setRoomCode(''); }} className="text-slate-400 hover:text-slate-600 font-bold text-xs uppercase tracking-widest mb-4 inline-block">← End Session</button>
+                            <button onClick={endSession} className="text-slate-400 hover:text-slate-600 font-bold text-xs uppercase tracking-widest mb-4 inline-block">
+                              ← End Session
+                            </button>
                             <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] mb-2 leading-none">Classroom Room Code</p>
                             <h1 className="text-9xl font-black text-indigo-600 tracking-tighter tabular-nums leading-none">{roomCode}</h1>
                         </div>
