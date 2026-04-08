@@ -212,14 +212,14 @@
                 <div className="flex items-center justify-center min-h-screen">
                     <div className="bg-white p-10 rounded-3xl shadow-xl w-full max-w-sm border border-slate-200 text-center">
                         <h1 className="text-4xl font-black mb-10 text-slate-800 tracking-tighter">Age Lab</h1>
-                        <button onClick={createRoom} className="w-full bg-indigo-600 text-white py-5 rounded-2xl font-bold hover:bg-indigo-700 transition mb-8 shadow-lg shadow-indigo-100 uppercase tracking-widest text-sm">Host as Teacher</button>
+                        <button onClick={createRoom} className="w-full bg-indigo-600 text-white py-5 rounded-2xl font-bold hover:bg-indigo-700 transition mb-8 shadow-lg shadow-indigo-100 uppercase tracking-widest text-sm">Host Room</button>
                         
                         <div className="relative mb-8 text-slate-300 uppercase text-[10px] font-black tracking-[0.3em] flex items-center gap-4">
-                            <div className="h-px bg-slate-100 flex-grow"></div> STUDENT JOIN <div className="h-px bg-slate-100 flex-grow"></div>
+                            <div className="h-px bg-slate-100 flex-grow"></div> OR <div className="h-px bg-slate-100 flex-grow"></div>
                         </div>
 
                         <form onSubmit={joinRoom} className="space-y-4">
-                            <input name="code" type="text" placeholder="4-Digit Code" className={`w-full p-4 border rounded-2xl text-center text-3xl font-black tracking-[0.2em] focus:ring-2 outline-none tabular-nums transition-all ${error ? 'border-red-500 ring-red-100 ring-4' : 'border-slate-200 focus:ring-emerald-500'}`} required maxLength="4" />
+                            <input name="code" type="text" placeholder="Room Code" className={`w-full p-4 border rounded-2xl text-center text-3xl font-black tracking-[0.2em] focus:ring-2 outline-none tabular-nums transition-all ${error ? 'border-red-500 ring-red-100 ring-4' : 'border-slate-200 focus:ring-emerald-500'}`} required maxLength="4" />
                             {error && <p className="text-red-500 text-xs font-bold animate-pulse">{error}</p>}
                             <button className="w-full bg-emerald-500 text-white py-4 rounded-2xl font-bold hover:bg-emerald-600 shadow-lg shadow-emerald-100 uppercase tracking-widest text-sm">Join Room</button>
                         </form>
@@ -265,11 +265,11 @@
                             <button onClick={endSession} className="text-slate-400 hover:text-slate-600 font-bold text-xs uppercase tracking-widest mb-4 inline-block">
                               ← End Session
                             </button>
-                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] mb-2 leading-none">Classroom Room Code</p>
+                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] mb-2 leading-none">Room Code</p>
                             <h1 className="text-9xl font-black text-indigo-600 tracking-tighter tabular-nums leading-none">{roomCode}</h1>
                         </div>
                         <div className="bg-white px-10 py-6 rounded-[2rem] border shadow-sm text-center min-w-[180px]">
-                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Submissions</p>
+                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Responses</p>
                             <p className="text-5xl font-black text-slate-800 tabular-nums leading-none">{population.length}</p>
                         </div>
                     </header>
@@ -317,7 +317,7 @@
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                         {/* BOX 1: POPULATION */}
                         <div className="bg-white p-10 rounded-[3rem] shadow-sm border border-slate-200">
-                            <h2 className="text-xs font-black text-slate-400 uppercase mb-8 tracking-[0.3em]">Population List (N={population.length})</h2>
+                            <h2 className="text-xs font-black text-slate-400 uppercase mb-8 tracking-[0.3em]">Population (Size: {population.length})</h2>
                             <div className="h-[450px] overflow-y-auto p-6 bg-slate-50 rounded-[2rem] border-2 border-dashed border-slate-200">
                                 <div className="flex flex-wrap gap-3">
                                     {population.length === 0 && <div className="flex flex-col items-center justify-center w-full h-full text-slate-300 gap-4"><div className="w-12 h-12 border-4 border-t-indigo-200 border-slate-100 rounded-full animate-spin"></div><p className="italic text-sm font-medium tracking-tight">Listening for entries...</p></div>}
@@ -343,8 +343,8 @@
                         {/* BOX 2: SAMPLE */}
                         <div className="bg-white p-10 rounded-[3rem] shadow-sm border border-slate-200">
                             <div className="flex justify-between items-center mb-8">
-                                <h2 className="text-xs font-black text-slate-400 uppercase tracking-[0.3em]">Active Sample (n={sampleData.length})</h2>
-                                <button onClick={() => setSampleIds([])} className="text-[10px] font-black text-red-400 hover:text-red-600 uppercase border-b-2 border-red-50 transition-colors">Clear Dataset</button>
+                                <h2 className="text-xs font-black text-slate-400 uppercase tracking-[0.3em]">Active Samples (Size: {sampleData.length})</h2>
+                                <button onClick={() => setSampleIds([])} className="text-[10px] font-black text-red-400 hover:text-red-600 uppercase border-b-2 border-red-50 transition-colors">Clear Samples</button>
                             </div>
                             <div className="h-[450px] overflow-y-auto p-6 bg-emerald-50/40 rounded-[2rem] border-2 border-dashed border-emerald-100">
                                 <div className="flex flex-wrap gap-3">
