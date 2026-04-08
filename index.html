@@ -192,7 +192,14 @@
                         <form onSubmit={submitAge} className="space-y-8">
                             <div>
                                 <label className="block text-xs font-black text-slate-400 uppercase mb-3 tracking-widest">Select Your Birthday</label>
-                                <input name="bday" type="date" max={getTodayStr()} className="w-full p-4 border-2 border-slate-100 rounded-2xl text-lg outline-emerald-500 bg-slate-50 font-medium cursor-pointer" required />
+                                <input
+                                  name="bday"
+                                  type="date"
+                                  max={getTodayStr()}
+                                  className="w-full min-w-0 block px-4 py-4 border-2 border-slate-100 rounded-2xl text-base sm:text-lg outline-emerald-500 bg-slate-50 font-medium cursor-pointer"
+                                  style={{ boxSizing: 'border-box' }}
+                                  required
+                                />
                             </div>
                             <button className="w-full bg-emerald-600 text-white py-5 rounded-2xl font-black shadow-lg shadow-emerald-100 text-sm uppercase tracking-widest hover:bg-emerald-700 transition-all">Submit My Age</button>
                         </form>
