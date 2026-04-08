@@ -25,8 +25,7 @@
         set,
         get,
         push,
-        onValue,
-        remove
+        onValue
       } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-database.js";
     
       const firebaseConfig = {
@@ -42,7 +41,7 @@
       const app = initializeApp(firebaseConfig);
       const db = getDatabase(app);
     
-      window.firebaseDb = { db, ref, set, get, push, onValue, remove };
+      window.firebaseDb = { db, ref, set, get, push, onValue };
       window.firebaseReady = true;
     
       console.log("Firebase ready:", window.firebaseDb);
@@ -137,12 +136,12 @@
               if (!confirmed) return;
             
               try {
-                const { db, ref, remove } = window.firebaseDb;
-                await remove(ref(db, `rooms/${roomCode}`));
+                const { db, ref, set } = window.firebaseDb;
+                await set(ref(db, `rooms/${roomCode}`), null);
                 resetToLanding();
               } catch (err) {
                 console.error("Failed to end session:", err);
-                alert("Failed to end session.");
+                alert(`Failed to end session: ${err.message}`);
               }
             };
             
